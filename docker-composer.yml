@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/warlocks
+      - RABBITMQ_URI=amqp://rabbitmq
+      - REDIS_HOST=redis
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+      - rabbitmq
+      - redis
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb-warlocks
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=war
+      - MONGO_INITDB_ROOT_PASSWORD=warlocks
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-warlocks
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=war
+      - RABBITMQ_DEFAULT_PASS=warlocks
+
+  redis:
+    image: redis:latest
+    container_name: redis-warlocks
+    restart: always
+    ports:
+      - "6379:6379"
