@@ -3,11 +3,13 @@ import {
     Controller,
     Get,
     Post,
-    UseInterceptors
+    UseGuards,
+    Request
 } from '@nestjs/common';
 
 
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/accounts/application/guards/auth.guard';
 
 @Controller('/account')
 @ApiTags('Account')
@@ -17,8 +19,9 @@ export class AccountController {
     ) { }
 
     @Get('')
-    getAll() {
-        return 'Hello World';
+    @UseGuards(AuthGuard)
+    getAll(@Request() request) {
+        return request.user
     }
 
     @Post('')

@@ -1,35 +1,33 @@
-# Use the official Nginx image as the base image
+# Usa a imagem oficial do Nginx como base
 FROM nginx:latest
 
-# Install Node.js 23.7.0
+# Instala Node.js e PM2
 RUN apt-get update && \
-  apt-get install -y curl && \
-  curl -fsSL https://deb.nodesource.com/setup_23.x | bash - && \
-  apt-get install -y nodejs
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_23.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pm2
 
-# Set the working directory
-WORKDIR /app
+# Define o diretório de trabalho para o código do app
+WORKDIR /var/www/html
 
-# Copy package.json and package-lock.json
+# Copia os arquivos de dependência primeiro para otimizar o cache
 COPY package*.json ./
 
-# Install dependencies
+# Instala as dependências
 RUN npm install
 
-# Copy the rest of the application code
+# Copia o restante do código da aplicação
 COPY . .
 
-# Build the NestJS application
-RUN npm run build
+# Torna o start.sh executável
+RUN chmod +x start.sh
 
-# Copy the built application to the Nginx html directory
-COPY /app/dist /usr/share/nginx/html
+# Expor as portas do NestJS e Nginx
+EXPOSE 5001 80
 
-# Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copia a configuração do Nginx
+COPY ./default /etc/nginx/sites-available/default
 
-# Expose port 5001
-EXPOSE 5001
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Usa o start.sh para iniciar a aplicação
+CMD ["sh", "/var/www/html/start.sh"]

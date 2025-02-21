@@ -1,4 +1,5 @@
-import { PrismaClient, Account } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { Account } from '../../domain/account';
 
 export class AccountPrismaRepository {
   private prisma: PrismaClient;
