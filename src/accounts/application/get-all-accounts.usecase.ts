@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { AccountRepository } from '../domain/account.repository';
-import { Account } from '../domain/account';
+import { AccountDto } from '../domain/dto/account.dto';
 
 @Injectable()
 export class GetAllAccountsUseCase {
   constructor(
-    private accountRepository: AccountRepository,
+    @Inject('AccountRepository') private accountRepository: AccountRepository,
   ) { }
 
-  async execute(): Promise<Account[]> {
-    const accounts = await this.accountRepository.findMany();
+  async execute(): Promise<AccountDto[]> {
+    const accounts = await this.accountRepository.findAll();
     return accounts;
   }
 }

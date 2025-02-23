@@ -1,5 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Entity } from 'src/shared/entity';
+import { Role } from '../application/roles/role.enum';
 
 interface AccountProps {
   id: string;
@@ -7,95 +6,30 @@ interface AccountProps {
   email: string;
   bio: string;
   password: string;
-  group: string;
+  roles: Role[];
   status: number;
   avatar: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
-export class Account extends Entity<AccountProps> {
-  constructor(props: AccountProps) {
-    super(props);
-  }
+export class Account {
 
-  @ApiProperty({ 
-    example: 'dwv7SB9Fyc8KskMjnzT6JRQYCUPHDXam32G', 
-    description: 'The id of the account' 
-  })
-  get id(): string {
-    return this.props.id;
-  }
+  id: string;
 
-  @ApiProperty({ 
-    example: 'Jane Doe', 
-    description: 'The name of the account' 
-  })
-  get name(): string {
-    return this.props.name;
-  }
+  name: string;
 
-  @ApiProperty({ 
-    example: 'jane.doe@example.com', 
-    description: 'The email of the account' 
-  })
-  get email(): string {
-    return this.props.email;
-  }
+  email: string;
 
-  @ApiProperty({ 
-    example: 'This is a bio', 
-    description: 'The bio of the account' 
-  })
-  get bio(): string {
-    return this.props.bio;
-  }
+  bio: string;
 
-  @ApiProperty({ 
-    example: 'password123', 
-    description: 'The password of the account' 
-  })
-  get password(): string {
-    return this.props.password;
-  }
+  password: string;
 
-  @ApiProperty({ 
-    example: 'admin', 
-    description: 'The group of the account' 
-  })
-  get group(): string {
-    return this.props.group;
-  }
+  roles: Role[];
 
-  @ApiProperty({ 
-    example: 1, 
-    description: 'The status of the account' 
-  })
-  get status(): number {
-    return this.props.status;
-  }
+  status: number;
 
-  @ApiProperty({ 
-    example: 'https://example.com/avatar.jpg', 
-    description: 'The avatar URL of the account' 
-  })
-  get avatar(): string {
-    return this.props.avatar;
-  }
+  avatar: string;
 
-  @ApiProperty({ 
-    example: '2025-02-20T00:00:00.000Z', 
-    description: 'The creation date of the account' 
-  })
-  get createdAt(): Date {
-    return this.props.createdAt;
-  }
-
-  @ApiProperty({ 
-    example: '2025-02-20T00:00:00.000Z', 
-    description: 'The last update date of the account' 
-  })
-  get updatedAt(): Date {
-    return this.props.updatedAt;
+  constructor(props: AccountProps){
+    Object.assign(this, props);
   }
 }

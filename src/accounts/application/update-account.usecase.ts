@@ -1,7 +1,8 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AccountRepository } from '../domain/account.repository';
 import { Account } from '../domain/account';
+import { AccountDto } from '../domain/dto/account.dto';
 
 @Injectable()
 export class UpdateAccountUseCase {
@@ -9,7 +10,7 @@ export class UpdateAccountUseCase {
     private accountRepository: AccountRepository,
   ) { }
 
-  async execute(accountId: string, data: Partial<Account>, confirmPassword?: string): Promise<Account> {
+  async execute(accountId: string, data: Partial<Account>, confirmPassword?: string): Promise<String> {
     const existingAccount = await this.accountRepository.findById(accountId);
     if (!existingAccount) {
       throw new ConflictException('Account not found');
@@ -33,20 +34,24 @@ export class UpdateAccountUseCase {
       hashedPassword = await bcrypt.hash(data.password, 10);
     }
 
-    const updatedAccount = new Account({
+    const account = new Account({
       id: accountId,
       name: data.name || existingAccount.name,
       email: data.email || existingAccount.email,
       bio: data.bio || existingAccount.bio,
-      group: data.group || existingAccount.group,
+      roles: data.roles || existingAccount.roles,
       avatar: data.avatar || existingAccount.avatar,
       password: hashedPassword,
       status: data.status || existingAccount.status,
-      createdAt: existingAccount.createdAt,
-      updatedAt: new Date(),
     });
 
-    return await this.accountRepository.update(accountId, updatedAccount);
+    const updatedAccount = await this.accountRepository.update(accountId, account);
+
+    if (!updatedAccount) {
+      throw new Error('Account not updated');
+    }
+  
+    return 'Account updated';
   }
   
 }

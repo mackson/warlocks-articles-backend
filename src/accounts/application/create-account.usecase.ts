@@ -1,15 +1,19 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AccountRepository } from '../domain/account.repository';
 import { Account } from '../domain/account';
+import { Role } from './roles/role.enum';
+import { AccountDto } from '../domain/dto/account.dto';
 
 @Injectable()
 export class CreateAccountUseCase {
   constructor(
-    private accountRepository: AccountRepository,
+    @Inject('AccountRepository') private accountRepository: AccountRepository,
   ) { }
 
-  async execute(data: Partial<Account>): Promise<Account> {
+  async execute(data: Partial<Account>): Promise<String> {
+
+    console.log(data);
     
     if (!data.email) {
       throw new ConflictException('Email is required');
@@ -30,15 +34,20 @@ export class CreateAccountUseCase {
       name: data.name || '',
       email: data.email,
       bio: data.bio || '',
-      group: data.group || 'Author',
+      roles: data.roles || [Role.Author],
       avatar: data.avatar || '',
       password: hashedPassword,
       status: 1,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
-    return await this.accountRepository.create(account);
+    const savedAccount = await this.accountRepository.create(account);
+
+    if (!savedAccount) {
+    throw new Error('Account not created');
+    }
+  
+    return 'Account created';
+
   }
   
 }

@@ -1,10 +1,10 @@
 import { Account } from "./account";
+import { AccountDto } from "./dto/account.dto";
 
 export interface AccountRepository {
-  create(data: Account): Promise<Account>;
-  findMany(): Promise<Account[]>;
-  findById(id: string): Promise<Account>;
-  update(id: string, data: Account): Promise<Account>;
-  login(email: string, password: string): Promise<String>;
-  findByEmail(email: string): Promise<Account>;
+  create(account: Account): Promise<String>;
+  findAll(): Promise<AccountDto[]>;
+  findById(id: string): Promise<Account | null>;
+  update(id: string, account: Account): Promise<String>;
+  findByEmail(email: string): Promise<Account | null>;
 }

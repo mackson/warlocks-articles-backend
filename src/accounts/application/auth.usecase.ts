@@ -1,25 +1,25 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AccountRepository } from '../domain/account.repository';
-import { Account } from '../domain/account';
 
-type LoginResponse = {
+type AccountProfile = {
   token: string;
   email: string;
   name: string;
   id: string;
   avatar: string;
+  roles: string[];
 };
 
 @Injectable()
 export class AuthUseCase {
   constructor(
-    private accountRepository: AccountRepository,
+    @Inject('AccountRepository') private accountRepository: AccountRepository,
     private jwtService: JwtService,
   ) { }
 
-  async login(email: string, password: string): Promise<{ userData: LoginResponse }> {
+  async login(email: string, password: string): Promise<{ account: AccountProfile }> {
  
     const account = await this.accountRepository.findByEmail(email);
     if (!account) {
@@ -31,18 +31,23 @@ export class AuthUseCase {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { sub: account.id, email: account.email };
+    const payload = { sub: account.id, email: account.email, roles: account.roles };
     const token = this.jwtService.sign(payload);
 
-    return { userData: { token: token, email: account.email, name: account.name, id: account.id, avatar: account.avatar } };
+    return {
+      account: {
+        token: token, 
+        email: account.email,
+        roles: account.roles, 
+        name: account.name, 
+        id: account.id, 
+        avatar: account.avatar
+      } 
+    };
   }
 
   async logout(accountId: string): Promise<void> {
     //logout logic 
   }
 
-  async checkToken(token: string): Promise<boolean> {
-    //check token logic
-    return true;
-  }
 }

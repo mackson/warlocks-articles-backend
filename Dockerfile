@@ -8,6 +8,13 @@ RUN apt-get update && \
     apt-get install -y nodejs && \
     npm install -g pm2
 
+
+RUN apt-get install -y procps \
+    && apt-get install -y nano \
+    && apt-get install -y net-tools \
+    && apt-get install -y iputils-ping
+ 
+
 # Define o diretório de trabalho para o código do app
 WORKDIR /var/www/html
 
