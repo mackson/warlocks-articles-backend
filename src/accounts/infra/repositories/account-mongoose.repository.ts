@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Account } from '../../domain/account';
+import { AccountEntity } from '../../domain/account.entity';
 import { AccountRepository } from 'src/accounts/domain/account.repository';
-import { AccountDocument, Account as AccountEntity } from '../schemas/account.schema';
+import { AccountDocument } from '../schemas/account.schema';
 import { AccountDto } from 'src/accounts/domain/dto/account.dto';
 import { AccountMapper } from './mapper/account.mapper';
 
 @Injectable()
 export class AccountMongooseRepository implements AccountRepository {
   constructor(
-    @InjectModel(AccountEntity.name) private accountModel: Model<AccountDocument>,
+    @InjectModel('Account') private accountModel: Model<AccountDocument>,
   ) {}
 
-  async create(account: Account): Promise<String> {
+  async create(account: AccountEntity): Promise<String> {
     const newAccount = new this.accountModel({
       name: account.name,
       email: account.email,
@@ -36,12 +36,12 @@ export class AccountMongooseRepository implements AccountRepository {
     return accounts.map(account => AccountMapper.returnAccount(account));
   }
 
-  async findById(id: string): Promise<Account | null> {
+  async findById(id: string): Promise<AccountEntity | null> {
     const account = await this.accountModel.findById(id).exec();
     return account ? AccountMapper.returnAllAccountData(account) : null;
   }
 
-  async update(id: string, data: Account): Promise<String> {
+  async update(id: string, data: AccountEntity): Promise<String> {
     const updatedAccount = await this.accountModel.findByIdAndUpdate(
       id,
       {
@@ -63,7 +63,7 @@ export class AccountMongooseRepository implements AccountRepository {
     return 'Account updated';
   }
 
-  async findByEmail(email: string): Promise<Account | null> {
+  async findByEmail(email: string): Promise<AccountEntity | null> {
     const account = await this.accountModel.findOne({ email }).exec();
     return account ? AccountMapper.returnAllAccountData(account) : null;
   }

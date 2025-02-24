@@ -1,11 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Role } from 'src/accounts/application/roles/role.enum';
 
-export type AccountDocument = Account & Document;
+export type ArticleDocument = Article & Document;
 
 @Schema({ timestamps: true })
-export class Account {
+export class Article {
   @Prop({ required: true })
   name: string;
 
@@ -15,8 +14,6 @@ export class Account {
   @Prop()
   bio: string;
 
-  @Prop({ type: [String], enum: Object.values(Role), required: true })
-  roles: Role[];
 
   @Prop()
   avatar: string;
@@ -29,4 +26,4 @@ export class Account {
 }
 
 // Gera o Schema automaticamente
-export const AccountSchema = SchemaFactory.createForClass(Account);
+export const AccountSchema = SchemaFactory.createForClass(Article);

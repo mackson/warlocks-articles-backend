@@ -5,7 +5,7 @@ import { AccountEntity } from '../domain/account.entity';
 import { Role } from './roles/role.enum';
 
 @Injectable()
-export class CreateAccountUseCase {
+export class CreateProfileUseCase {
   constructor(
     @Inject('AccountRepository') private accountRepository: AccountRepository,
   ) { }
@@ -31,7 +31,7 @@ export class CreateAccountUseCase {
       name: data.name || '',
       email: data.email,
       bio: data.bio || '',
-      roles: data.roles || [Role.Author],
+      roles: [Role.Author],
       avatar: data.avatar || '',
       password: hashedPassword,
       status: 1,
@@ -40,7 +40,7 @@ export class CreateAccountUseCase {
     const savedAccount = await this.accountRepository.create(account);
 
     if (!savedAccount) {
-      throw new Error('Account not created');
+    throw new Error('Account not created');
     }
   
     return 'Account created';

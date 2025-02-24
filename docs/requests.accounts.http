@@ -1,0 +1,68 @@
+### Login
+POST http://localhost:5001/account/login
+Content-Type: application/json
+
+{
+  "username": "mjane.doe@example.com",
+  "password": "password123"
+}
+
+### Create Account (requires admin role)
+POST http://localhost:5001/account/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+
+{
+  "name": "Mary Hane Doe",
+  "email": "mhane.doe@example.com",
+  "bio": "This is a bio",
+  "password": "password123",
+  "status": 1,
+  "avatar": "https://example.com/avatar.jpg",
+  "roles": ["author"]
+}
+
+### Update Account (requires admin role)
+PUT http://localhost:5001/account/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+
+{
+  "accountId": "67baa6595bf32d6cab827acc",
+  "name": "Luna Jane Doe"
+}
+
+### Get All Accounts (requires admin role)
+GET http://localhost:5001/account/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
+
+### Create Profile (Public endpoint)
+POST http://localhost:5001/account/signup
+Content-Type: application/json
+
+{
+  "name": "Mary Jane Doe",
+  "email": "mgjane.doe@example.com",
+  "bio": "This is a bio",
+  "password": "password123",
+  "status": 1,
+  "avatar": "https://example.com/avatar.jpg",
+  "roles": ["author"]
+}
+
+### Update Profile (requires auth token)
+PUT http://localhost:5001/account/updateprofile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
+
+{
+  "accountId": "67bb2063af40f6ff71930d50",
+  "bio": "My name is optumus prime"
+}
+
+### Get One Profile by Id (requires auth token)
+GET http://localhost:5001/account/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JhODFmYTUyOTJiZmQ4OTIwYWEyZTAiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwicm9sZXMiOlsiYXV0aG9yIl0sImlhdCI6MTc0MDMxNzY4OSwiZXhwIjoxNzQwMzIxMjg5fQ.yLhJmTFQKoGJb1sCiYyaOqKApW1dWj7BUeg6NZg8B0E
+
+### Health Check
+GET http://localhost:5001/account/health

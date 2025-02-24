@@ -4,15 +4,19 @@ import { AccountRepository } from '../domain/account.repository';
 import { AccountEntity } from '../domain/account.entity';
 
 @Injectable()
-export class UpdateAccountUseCase {
+export class UpdateProfileUseCase {
   constructor(
     @Inject('AccountRepository') private accountRepository: AccountRepository,
   ) { }
 
-  async execute(accountId: string, data: Partial<AccountEntity>, confirmPassword?: string): Promise<String> {
+  async execute(accountId: string, data: Partial<AccountEntity>, user: any, confirmPassword?: string): Promise<String> {
     const existingAccount = await this.accountRepository.findById(accountId);
     if (!existingAccount) {
       throw new ConflictException('Account not found');
+    }
+
+    if (user.sub !== accountId) {
+      throw new UnauthorizedException('You do not have permission to edit this account');
     }
 
     if (data.email && data.email !== existingAccount.email) {

@@ -11,7 +11,7 @@ interface AccountProps {
   avatar: string;
 }
 
-export class Account {
+export class AccountEntity {
 
   id: string;
 

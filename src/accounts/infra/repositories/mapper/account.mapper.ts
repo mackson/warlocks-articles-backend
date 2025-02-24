@@ -1,4 +1,4 @@
-import { Account } from "src/accounts/domain/account";
+import { AccountEntity } from "src/accounts/domain/account.entity";
 import { AccountDocument } from "../../schemas/account.schema";
 import { AccountDto } from "src/accounts/domain/dto/account.dto";
 
@@ -16,8 +16,8 @@ export class AccountMapper {
     };
   }
 
-  static returnAllAccountData(account: AccountDocument) : Account {
-    return new Account({
+  static returnAllAccountData(account: AccountDocument) : AccountEntity {
+    return new AccountEntity({
       id: (account._id as string).toString(),
       name: account.name,
       email: account.email,
