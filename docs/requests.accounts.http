@@ -1,3 +1,5 @@
+@token = YOUR_ACCESS_TOKEN
+
 ### Login
 POST http://localhost:5001/account/login
 Content-Type: application/json
@@ -10,7 +12,7 @@ Content-Type: application/json
 ### Create Account (requires admin role)
 POST http://localhost:5001/account/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+Authorization: Bearer {{token}}
 
 {
   "name": "Mary Hane Doe",
@@ -25,7 +27,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M
 ### Update Account (requires admin role)
 PUT http://localhost:5001/account/update
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+Authorization: Bearer {{token}}
 
 {
   "accountId": "67baa6595bf32d6cab827acc",
@@ -34,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M
 
 ### Get All Accounts (requires admin role)
 GET http://localhost:5001/account/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
+Authorization: Bearer {{token}}
 
 ### Create Profile (Public endpoint)
 POST http://localhost:5001/account/signup
@@ -53,7 +55,7 @@ Content-Type: application/json
 ### Update Profile (requires auth token)
 PUT http://localhost:5001/account/updateprofile
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
+Authorization: Bearer {{token}}
 
 {
   "accountId": "67bb2063af40f6ff71930d50",
@@ -62,7 +64,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M
 
 ### Get One Profile by Id (requires auth token)
 GET http://localhost:5001/account/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JhODFmYTUyOTJiZmQ4OTIwYWEyZTAiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwicm9sZXMiOlsiYXV0aG9yIl0sImlhdCI6MTc0MDMxNzY4OSwiZXhwIjoxNzQwMzIxMjg5fQ.yLhJmTFQKoGJb1sCiYyaOqKApW1dWj7BUeg6NZg8B0E
+Authorization: Bearer {{token}}
 
 ### Health Check
 GET http://localhost:5001/account/health

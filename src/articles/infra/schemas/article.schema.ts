@@ -1,29 +1,37 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { CommentEntity } from 'src/articles/domain/comment.entity';
 
 export type ArticleDocument = Article & Document;
 
 @Schema({ timestamps: true })
 export class Article {
   @Prop({ required: true })
-  name: string;
+  title: string;
 
   @Prop({ required: true, unique: true })
-  email: string;
+  slug: string;
+
+  @Prop({ required: true })
+  author_id: string;
+
+  @Prop({ required: true })
+  content: string;
 
   @Prop()
-  bio: string;
+  cover: string;
 
+  @Prop({ type: [String], default: [] })
+  likes: string[];
 
-  @Prop()
-  avatar: string;
+  @Prop({ type: [String], default: [] })
+  tags: string[];
 
-  @Prop({ required: true, minlength: 6 })
-  password: string;
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }], default: [] })
+  comments: CommentEntity[];
 
   @Prop({ required: true })
   status: number;
 }
 
-// Gera o Schema automaticamente
-export const AccountSchema = SchemaFactory.createForClass(Article);
+export const ArticleSchema = SchemaFactory.createForClass(Article);

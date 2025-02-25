@@ -6,6 +6,9 @@ import {
   IsArray,
   IsNumber,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { sanitize } from 'class-sanitizer';
+import { XssSanitize } from 'src/shared/xss-cleaner.decorator';
 
 export class ArticleDto {
   @ApiProperty({
@@ -14,6 +17,8 @@ export class ArticleDto {
   })
   @IsString()
   @IsNotEmpty()
+  @XssSanitize()
+  @Transform(({ value }) => sanitize(value))
   title: string;
 
   @ApiProperty({
@@ -22,6 +27,8 @@ export class ArticleDto {
   })
   @IsString()
   @IsNotEmpty()
+  @XssSanitize()
+  @Transform(({ value }) => sanitize(value))
   content: string;
 
   @ApiProperty({

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ArticleRepository } from '../domain/article.repository';
 import { ArticleEntity } from '../domain/article.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CreateArticleUseCase {
@@ -14,10 +15,10 @@ export class CreateArticleUseCase {
       throw new Error('Title and content are required');
     }
     
-    const slug = `${data.title.replace(/\s+/g, '-').toLowerCase()}-${userId}`;
+    const slug = `${data.title.replace(/\s+/g, '-').toLowerCase()}-${uuidv4()}`;
     
     const article = new ArticleEntity({
-      title: data.title || 'Untitled',
+      title: data.title || 'My Awesome Article',
       content: data.content || '',
       cover: data.cover || '',
       slug,

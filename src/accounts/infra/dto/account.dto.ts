@@ -12,6 +12,7 @@ import {
 import { Transform } from 'class-transformer';
 import { sanitize } from 'class-sanitizer';
 import { Role } from 'src/accounts/application/roles/role.enum';
+import { XssSanitize } from 'src/shared/xss-cleaner.decorator';
 
 export class AccountDto {
   @ApiProperty({
@@ -20,6 +21,7 @@ export class AccountDto {
   })
   @IsString()
   @IsNotEmpty()
+  @XssSanitize()
   @Transform(({ value }) => sanitize(value))
   name: string;
 
@@ -29,6 +31,7 @@ export class AccountDto {
   })
   @IsEmail()
   @IsNotEmpty()
+  @XssSanitize()
   @Transform(({ value }) => sanitize(value))
   email: string;
 
@@ -38,6 +41,7 @@ export class AccountDto {
   })
   @IsString()
   @IsOptional()
+  @XssSanitize()
   @Transform(({ value }) => sanitize(value))
   bio: string;
 
@@ -48,6 +52,7 @@ export class AccountDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
+  @XssSanitize()
   @Transform(({ value }) => sanitize(value))
   password: string;
 
@@ -73,6 +78,7 @@ export class AccountDto {
   })
   @IsUrl()
   @IsOptional()
+  @XssSanitize()
   @Transform(({ value }) => sanitize(value))
   avatar: string;
 }

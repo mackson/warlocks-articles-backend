@@ -6,43 +6,64 @@ import {
   IsArray,
   IsNumber,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { sanitize } from 'class-sanitizer';
+import { XssSanitize } from 'src/shared/xss-cleaner.decorator';
 
 export class CommentDto {
   @ApiProperty({
-    example: 'My First Article',
-    description: 'The title of the article',
+    example: '60d0fe4f5311236168a109ca',
+    description: 'The ID of the comment',
   })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  id: string;
 
   @ApiProperty({
-    example: 'This is the content of the article',
-    description: 'The content of the article',
+    example: '60d0fe4f5311236168a109cb',
+    description: 'The ID of the author',
   })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  author_id: string;
 
   @ApiProperty({
-    example: 'https://example.com/cover.jpg',
-    description: 'The cover image URL of the article',
+    example: 'This is the content of the comment',
+    description: 'The content of the comment',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @XssSanitize()
+  @Transform(({ value }) => sanitize(value))
+  comment: string;
+
+  @ApiProperty({
+    example: 0,
+    description: 'Indicates if the comment is a reply (0 for false, 1 for true)',
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  is_reply: number;
+
+  @ApiProperty({
+    example: '60d0fe4f5311236168a109cc',
+    description: 'The ID of the comment being replied to, if applicable',
   })
   @IsString()
   @IsOptional()
-  cover?: string;
+  reply_id?: string;
 
   @ApiProperty({
-    example: ['tag1', 'tag2'],
-    description: 'The tags of the article',
+    example: ['user1', 'user2'],
+    description: 'The likes of the comment',
   })
   @IsArray()
   @IsOptional()
-  tags?: string[];
+  likes?: string[];
 
   @ApiProperty({
     example: 1,
-    description: 'The status of the article',
+    description: 'The status of the comment',
   })
   @IsNumber()
   @IsOptional()

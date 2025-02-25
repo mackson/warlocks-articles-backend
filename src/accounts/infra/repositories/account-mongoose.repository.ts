@@ -14,15 +14,7 @@ export class AccountMongooseRepository implements AccountRepository {
   ) {}
 
   async create(account: AccountEntity): Promise<String> {
-    const newAccount = new this.accountModel({
-      name: account.name,
-      email: account.email,
-      bio: account.bio,
-      roles: account.roles,
-      avatar: account.avatar,
-      password: account.password,
-      status: account.status,
-    });
+    const newAccount = new this.accountModel(account);
 
     const savedAccount = await newAccount.save();
     if (!savedAccount) {

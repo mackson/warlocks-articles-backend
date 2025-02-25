@@ -1,4 +1,5 @@
 interface CommentProps {
+  id: string;
   author_id: string;
   comment: string;
   is_reply: number;
@@ -8,6 +9,8 @@ interface CommentProps {
 }
 
 export class CommentEntity {
+
+  id: string;
  
   author_id: string;
 

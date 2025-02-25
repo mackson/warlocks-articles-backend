@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { InfraModule } from './infra/infra.module';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,9 +7,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     MongooseModule.forRoot(`${process.env.DATABASE_URL}`),
     InfraModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,

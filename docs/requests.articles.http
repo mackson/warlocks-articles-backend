@@ -1,4 +1,6 @@
-### Login
+@token = YOUR_ACCESS_TOKEN
+
+### Login public endpoint
 POST http://localhost:5001/account/login
 Content-Type: application/json
 
@@ -7,62 +9,50 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### Create Account (requires admin role)
-POST http://localhost:5001/account/create
+### Create Article (requires athenticated user)
+POST http://localhost:5001/articles/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+Authorization: Bearer {{token}}
 
 {
-  "name": "Mary Hane Doe",
-  "email": "mhane.doe@example.com",
-  "bio": "This is a bio",
-  "password": "password123",
-  "status": 1,
-  "avatar": "https://example.com/avatar.jpg",
-  "roles": ["author"]
+  "title": "Article Title",
+  "content": "Article Content",
+  "cover": "https://example.com/cover.jpg",
+  "tags": ["tag1", "tag2"]
 }
 
-### Update Account (requires admin role)
-PUT http://localhost:5001/account/update
+### Update Article (requires athenticated user)
+PUT http://localhost:5001/articles/update/{articleId}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM0OTQ0OSwiZXhwIjoxNzQwMzUzMDQ5fQ.T7OoyFhSN2tknh0RgX7uKgPhe59FgJ8TGCs2lnyUKcs
+Authorization: Bearer {{token}}
 
 {
-  "accountId": "67baa6595bf32d6cab827acc",
-  "name": "Luna Jane Doe"
+  "title": "Article Title 2",
+  "content": "Article Content 2",
+  "cover": "https://example.com/cover2.jpg",
+  "tags": ["tag1", "tag2", "tag3"]
 }
 
-### Get All Accounts (requires admin role)
-GET http://localhost:5001/account/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
+### Update Likes (requires athenticated user)
+GET http://localhost:5001/articles/updatelike/{articleId} HTTP/1.1
+Authorization: Bearer {{token}}
 
-### Create Profile (Public endpoint)
-POST http://localhost:5001/account/signup
+### Delete Article (requires athenticated user)
+DELETE http://localhost:5001/articles/delete/{articleId} HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Get all articles with pagination
+GET http://localhost:5001/articles/all?page=1&limit=10 HTTP/1.1
+
+### Show Article by Slug
+GET http://localhost:5001/articles/{slug} HTTP/1.1
+
+### Search Articles
+POST http://localhost:5001/articles/search HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Mary Jane Doe",
-  "email": "mgjane.doe@example.com",
-  "bio": "This is a bio",
-  "password": "password123",
-  "status": 1,
-  "avatar": "https://example.com/avatar.jpg",
-  "roles": ["author"]
+  "title": "Palavra-chave do título",
+  "tags": ["tag1"]
 }
 
-### Update Profile (requires auth token)
-PUT http://localhost:5001/account/updateprofile
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JiMjA2M2FmNDBmNmZmNzE5MzBkNTAiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTc0MDM1MzE4MCwiZXhwIjoxNzQwMzU2NzgwfQ.vZfwwlf_UH11h2K_SawoKCmZSVsjE9HTGNmNYBoqe2g
-
-{
-  "accountId": "67bb2063af40f6ff71930d50",
-  "bio": "My name is optumus prime"
-}
-
-### Get One Profile by Id (requires auth token)
-GET http://localhost:5001/account/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JhODFmYTUyOTJiZmQ4OTIwYWEyZTAiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwicm9sZXMiOlsiYXV0aG9yIl0sImlhdCI6MTc0MDMxNzY4OSwiZXhwIjoxNzQwMzIxMjg5fQ.yLhJmTFQKoGJb1sCiYyaOqKApW1dWj7BUeg6NZg8B0E
-
-### Health Check
-GET http://localhost:5001/account/health

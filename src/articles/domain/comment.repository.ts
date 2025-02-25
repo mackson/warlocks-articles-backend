@@ -1,9 +1,9 @@
 import { CommentEntity } from "./comment.entity";
 
 export interface CommentRepository {
-  create(account: CommentEntity): Promise<String>;
-  update(id: string, account: CommentEntity): Promise<String>;
-  delete(id: string, account: CommentEntity): Promise<String>;
-  findAll(): Promise<CommentEntity[]>;
-  updateLikes(id: string, like:string): Promise<String>;
+  create(articleId: string, comment: CommentEntity): Promise<String>;
+  update(articleId: string, commentId: string, comment: Partial<CommentEntity>): Promise<string>;
+  delete(articleId: string, commentId: string): Promise<void>;
+  findAll(articleId: string): Promise<CommentEntity[]>;
+  updateLikes(articleId: string, id: string, like:string): Promise<void>;
 }

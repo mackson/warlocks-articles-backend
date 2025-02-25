@@ -1,43 +1,62 @@
 import { Module } from '@nestjs/common';
-import { CreateAccountUseCase } from 'src/accounts/application/create-account.usecase';
-import { AccountMongooseRepository } from 'src/accounts/infra/repositories/account-mongoose.repository';
-import { GetAllAccountsUseCase } from '../application/get-all-accounts.usecase';
-import { AuthUseCase } from '../application/auth.usecase';
+import { ArticleMongooseRepository } from 'src/articles/infra/repositories/article-mongoose.repository';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Account, AccountSchema } from './schemas/article.schema';
-import { UpdateAccountUseCase } from '../application/update-account.usecase';
-import { CreateProfileUseCase } from '../application/create-profile.usecase';
-import { UpdateProfileUseCase } from '../application/update-profile.usecase';
-import { GetProfileUseCase } from '../application/get-profile.usecase';
+import { Article, ArticleSchema } from './schemas/article.schema';
 import { ArticleController } from './http/article.controller';
+import { CreateArticleUseCase } from '../application/create-article.usecase';
+import { CreateCommentUseCase } from '../application/create-comment.usecase';
+import { DeleteArticleUseCase } from '../application/delete-article.usecase';
+import { DeleteCommentUseCase } from '../application/delete-comment.usecase';
+import { GetAllArticlesUseCase } from '../application/get-all-articles.usecase';
+import { GetAllCommentsUseCase } from '../application/get-all-comments.usecase';
+import { GetOneArticleUseCase } from '../application/get-one-article.usecase';
+import { SearchArticlesUseCase } from '../application/search-articles.usecase';
+import { UpdateArticleUseCase } from '../application/update-article.usecase';
+import { UpdateCommentUseCase } from '../application/update-comment.usecase';
+import { CommentMongooseRepository } from './repositories/comment-mongoose.repository';
+import { CacheInvalidationHelper } from 'src/shared/cache.invalidation.helper';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
+    MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
   ],
   controllers: [ArticleController],
   providers: [
     {
-      provide: 'AccountRepository',
-      useClass: AccountMongooseRepository,
+      provide: 'ArticleRepository',
+      useClass: ArticleMongooseRepository,
     },
-    CreateAccountUseCase,
-    CreateProfileUseCase,
-    UpdateAccountUseCase,
-    UpdateProfileUseCase,
-    GetAllAccountsUseCase,
-    GetProfileUseCase,
-    AuthUseCase,
+    {
+      provide: 'CommentRepository',
+      useClass: CommentMongooseRepository,
+    },
+    CreateArticleUseCase,
+    CreateCommentUseCase,
+    DeleteArticleUseCase,
+    DeleteCommentUseCase,
+    GetAllArticlesUseCase,
+    GetAllCommentsUseCase,
+    GetOneArticleUseCase,
+    SearchArticlesUseCase,
+    UpdateArticleUseCase,
+    UpdateCommentUseCase,
+    CacheInvalidationHelper,
+   
   ],
   exports: [
-    'AccountRepository',
-    CreateAccountUseCase,
-    CreateProfileUseCase,
-    UpdateAccountUseCase,
-    UpdateProfileUseCase,
-    GetAllAccountsUseCase,
-    GetProfileUseCase,
-    AuthUseCase,
+    'ArticleRepository',
+    'CommentRepository',
+    CreateArticleUseCase,
+    CreateCommentUseCase,
+    DeleteArticleUseCase,
+    DeleteCommentUseCase,
+    GetAllArticlesUseCase,
+    GetAllCommentsUseCase,
+    GetOneArticleUseCase,
+    SearchArticlesUseCase,
+    UpdateArticleUseCase,
+    UpdateCommentUseCase,
+    CacheInvalidationHelper
   ],
   
 })

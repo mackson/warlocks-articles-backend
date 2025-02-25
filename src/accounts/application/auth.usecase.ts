@@ -46,8 +46,4 @@ export class AuthUseCase {
     };
   }
 
-  async logout(accountId: string): Promise<void> {
-    //logout logic 
-  }
-
 }
