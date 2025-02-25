@@ -37,14 +37,14 @@ export class ArticleController {
   @Post('create')
   @UseGuards(AuthGuard)
   async create(
-    @Body() articleDto: ArticleDto, 
+    @Body() articleDto: Partial<ArticleDto>, 
     @Request() req: any
   ) {
     try {
       const article = await this.createArticleUseCase.execute(articleDto, req.account.sub);
       return article;
     } catch (error) {
-      throw new Error(error.message);
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -115,7 +115,7 @@ export class ArticleController {
       const articles = await this.getAllArticlesUseCase.execute(page, limit);
       return articles;
     } catch (error) {
-      throw new Error(error.message);
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -125,20 +125,17 @@ export class ArticleController {
       const article = await this.getOneArticleUseCase.execute(slug);
       return article;
     } catch (error) {
-      throw new Error(error.message);
+      throw new NotFoundException(error.message);
     }
   }
 
   @Post('search')
-  async search(
-    @Body() title: string,
-    @Body() tags: string[], 
-   ) {
+  async search(@Body() body: { title: string }) {
     try {
-      const articles = await this.searchArticlesUseCase.execute(title, tags);
+      const articles = await this.searchArticlesUseCase.execute(body.title);
       return articles;
     } catch (error) {
-      throw new Error(error.message);
+      throw new NotFoundException(error.message);
     }
   }
 

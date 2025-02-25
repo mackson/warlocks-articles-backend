@@ -2,22 +2,31 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
-  IsOptional,
   IsArray,
   IsNumber,
+  IsDate,
+  IsOptional,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { sanitize } from 'class-sanitizer';
 import { XssSanitize } from 'src/shared/xss-cleaner.decorator';
 
 export class CommentDto {
+
   @ApiProperty({
-    example: '60d0fe4f5311236168a109ca',
-    description: 'The ID of the comment',
+    example: '67bd29ed8e5a2c55f3c3f0fb',
+    description: 'The id of the comment',
+  })
+  @IsString()
+  id?: string;
+
+  @ApiProperty({
+    example: '60d0fe4f5311236168a209bg',
+    description: 'The ID of the Article',
   })
   @IsString()
   @IsNotEmpty()
-  id: string;
+  article_id: string;
 
   @ApiProperty({
     example: '60d0fe4f5311236168a109cb',
@@ -43,22 +52,21 @@ export class CommentDto {
   })
   @IsNumber()
   @IsNotEmpty()
-  is_reply: number;
+  is_reply?: number;
 
   @ApiProperty({
     example: '60d0fe4f5311236168a109cc',
     description: 'The ID of the comment being replied to, if applicable',
   })
   @IsString()
-  @IsOptional()
-  reply_id?: string;
+  @IsNotEmpty()
+  reply_id: string;
 
   @ApiProperty({
     example: ['user1', 'user2'],
     description: 'The likes of the comment',
   })
   @IsArray()
-  @IsOptional()
   likes?: string[];
 
   @ApiProperty({
@@ -66,6 +74,21 @@ export class CommentDto {
     description: 'The status of the comment',
   })
   @IsNumber()
-  @IsOptional()
   status?: number;
+
+  @ApiProperty({
+    example: '2025-02-25T02:24:45.620Z',
+    description: 'The create date of the comment',
+  })
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date;
+
+  @ApiProperty({
+    example: '2025-02-25T02:24:45.620Z',
+    description: 'The update date of the comment',
+  })
+  @IsDate()
+  @IsOptional()
+  updatedAt?: Date;
 }

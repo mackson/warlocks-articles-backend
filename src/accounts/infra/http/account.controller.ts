@@ -7,7 +7,8 @@ import {
     Request,
     ConflictException,
     Put,
-    NotFoundException
+    NotFoundException,
+    Param
 } from '@nestjs/common';
 
 import { ApiTags } from '@nestjs/swagger';
@@ -126,10 +127,10 @@ export class AccountController {
     }
   }
 
-  @Get('profile')
+  @Get('/profile/:accountId')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Author, Role.Admin)
-  async profile(@Body() accountId: string) {
+  async profile(@Param('accountId') accountId: string) {
     try {
       const profile = await this.getProfileUseCase.execute(accountId);
       return profile;

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { AccountRepository } from '../domain/account.repository';
 import { AccountEntity } from '../domain/account.entity';
 
@@ -11,7 +11,7 @@ export class GetProfileUseCase {
   async execute(id: string): Promise<AccountEntity> {
     const account = await this.accountRepository.findById(id);
     if (!account) {
-      throw new Error('Account not found');
+      throw new ConflictException('Account not found');
     }
     return account;
   }

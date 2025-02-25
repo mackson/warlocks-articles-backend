@@ -1,6 +1,5 @@
-import { CommentEntity } from "./comment.entity";
-
 interface ArticleProps {
+  id?: string;
   title: string;
   slug: string;
   author_id: string;
@@ -8,12 +7,15 @@ interface ArticleProps {
   cover: string;
   likes: string[];
   tags: string[];
-  comments: CommentEntity[];
   status: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class ArticleEntity {
- 
+  
+  id?: string;
+
   title: string;
 
   slug: string;
@@ -28,9 +30,11 @@ export class ArticleEntity {
 
   tags: string[];
 
-  comments: CommentEntity[];
-
   status: number;
+
+  createdAt?: Date;
+
+  updatedAt?: Date;
 
   constructor(props: ArticleProps){
     Object.assign(this, props);

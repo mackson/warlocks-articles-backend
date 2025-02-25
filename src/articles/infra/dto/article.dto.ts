@@ -5,12 +5,20 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
+  IsDate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { sanitize } from 'class-sanitizer';
 import { XssSanitize } from 'src/shared/xss-cleaner.decorator';
 
 export class ArticleDto {
+
+  @ApiProperty({
+    example: '67bd29ed8e5a2c55f3c3f0fb',
+    description: 'The id of the article',
+  })
+  @IsString()
+  id?: string;
   @ApiProperty({
     example: 'My First Article',
     description: 'The title of the article',
@@ -54,4 +62,20 @@ export class ArticleDto {
   @IsNumber()
   @IsOptional()
   status?: number;
+
+  @ApiProperty({
+    example: '2025-02-25T02:24:45.620Z',
+    description: 'The create date of the article',
+  })
+  @IsDate()
+  @IsOptional()
+  createdAt?: Date;
+
+  @ApiProperty({
+    example: '2025-02-25T02:24:45.620Z',
+    description: 'The update date of the article',
+  })
+  @IsDate()
+  @IsOptional()
+  updatedAt?: Date;
 }

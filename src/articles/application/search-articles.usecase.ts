@@ -9,7 +9,7 @@ export class SearchArticlesUseCase {
     @Inject('ArticleRepository') private articleRepository: ArticleRepository,
   ) { }
 
-  async execute(title:string, tags:string[]): Promise<ArticleEntity[]> {
-    return await this.articleRepository.search(title, tags);
+  async execute(title: string): Promise<ArticleEntity[]> {
+    return await this.articleRepository.search(title);
   }
 }

@@ -1,34 +1,31 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-export type ArticleDocument = Article & Document;
+export type CommentDocument = Comment & Document;
 
 @Schema({ timestamps: true })
-export class Article {
+export class Comment {
 
   @Prop()
   id: string;
 
   @Prop({ required: true })
-  title: string;
+  article_id: string;
 
-  @Prop({ required: true, unique: true })
-  slug: string;
-
-  @Prop({ required: true })
+  @Prop({ required: true})
   author_id: string;
 
   @Prop({ required: true })
-  content: string;
+  comment: string;
 
   @Prop()
-  cover: string;
+  is_reply: number;
+
+  @Prop()
+  reply_id: string;
 
   @Prop({ type: [String], default: [] })
   likes: string[];
-
-  @Prop({ type: [String], default: [] })
-  tags: string[];
 
   @Prop({ required: true })
   status: number;
@@ -40,4 +37,4 @@ export class Article {
   updatedAt: Date;
 }
 
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export const CommentSchema = SchemaFactory.createForClass(Comment);

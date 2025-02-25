@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ArticleRepository } from '../domain/article.repository';
 import { ArticleEntity } from '../domain/article.entity';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +12,7 @@ export class CreateArticleUseCase {
   async execute(data: Partial<ArticleEntity>, userId: string): Promise<String> {
 
     if (!data.title || !data.content) {
-      throw new Error('Title and content are required');
+      throw new NotFoundException('Title and content are required');
     }
     
     const slug = `${data.title.replace(/\s+/g, '-').toLowerCase()}-${uuidv4()}`;
@@ -25,7 +25,6 @@ export class CreateArticleUseCase {
       author_id: userId,
       likes: [],
       tags: data.tags || [],
-      comments: [],
       status: data.status || 1,
     });
 

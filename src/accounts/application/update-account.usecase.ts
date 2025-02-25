@@ -47,7 +47,7 @@ export class UpdateAccountUseCase {
     const updatedAccount = await this.accountRepository.update(accountId, account);
 
     if (!updatedAccount) {
-      throw new Error('Account not updated');
+      throw new BadRequestException('Account not updated');
     }
   
     return 'Account updated';

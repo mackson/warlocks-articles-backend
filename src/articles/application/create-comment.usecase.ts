@@ -3,6 +3,7 @@ import { CommentRepository } from '../domain/comment.repository';
 import { CommentEntity } from '../domain/comment.entity';
 import { ArticleRepository } from '../domain/article.repository';
 
+
 @Injectable()
 export class CreateCommentUseCase {
   constructor(
@@ -12,7 +13,7 @@ export class CreateCommentUseCase {
 
   async execute(articleId: string, data: Partial<CommentEntity>, userId: string): Promise<String> {
     if (!data.comment) {
-      throw new Error('Content is required');
+      throw new NotFoundException('Content is required');
     }
 
     const article = await this.articleRepository.findById(articleId);
@@ -21,7 +22,7 @@ export class CreateCommentUseCase {
     }
 
     const comment = new CommentEntity({
-      id: '',
+      article_id: articleId,
       author_id: userId,
       comment: data.comment,
       is_reply: data.is_reply ?? 0,
@@ -33,7 +34,7 @@ export class CreateCommentUseCase {
     const savedComment = await this.commentRepository.create(articleId, comment);
 
     if (!savedComment) {
-      throw new Error('Article not created');
+      throw new NotFoundException('Article not created');
     }
   
     return 'Comment created';

@@ -1,4 +1,4 @@
-@token = YOUR_ACCESS_TOKEN
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JkMWU1MjE4NWUyNTQ5NDI3NzM3NDgiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImF1dGhvciJdLCJpYXQiOjE3NDA0ODM1OTIsImV4cCI6MTc0MDQ4NzE5Mn0.l6wcEYR6nOWgSnZqWM8XsfKLlVVtj-MqW_48GiR8cHE
 
 ### Login public endpoint
 POST http://localhost:5001/account/login
@@ -10,31 +10,39 @@ Content-Type: application/json
 }
 
 ### Create a comment
-POST http://localhost:5001/articles/{articleId}/comments/create HTTP/1.1
+POST http://localhost:5001/comments/create HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "comment": "Este é um comentário de exemplo.",
-  "is_reply": 0,
+  "articleId": "67bd3c32b466408285313a8f",
+  "author_id": "67bd1e52185e254942773748",
+  "comment": "Este é um comentário de exemplo4",
+  "is_reply": 0
 }
 
 ### Update a comment
-PUT http://localhost:5001/articles/{articleId}/comments/update/{commentId} HTTP/1.1
+PUT http://localhost:5001/comments/update/67bd3c32b466408285313a8f/67bd8624f30e2e5ec64c8c4f
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "content": "Este é um comentário atualizado."
+  "comment": "Este é um comentário atualizado7",
+  "author_id": "67bd1e52185e254942773748"
 }
 
 ### Delete a comment
-DELETE http://localhost:5001/articles/{articleId}/comments/delete/{commentId} HTTP/1.1
+DELETE http://localhost:5001/comments/delete/67bd8624f30e2e5ec64c8c4f HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Get all comments for an article
-GET http://localhost:5001/articles/{articleId}/comments/all HTTP/1.1
+GET http://localhost:5001/comments/all/67bd3c32b466408285313a8f HTTP/1.1
+
 
 ### Update likes for a comment
-GET http://localhost:5001/articles/{articleId}/comments/updatelike/{commentId} HTTP/1.1
+GET http://localhost:5001/comments/like/67bd3c32b466408285313a8f/67bd998c3a427de77fb42459 HTTP/1.1
 Authorization: Bearer {{token}}
+
+### Get One Comment
+GET http://localhost:5001/comments/67bd82afcc5fa6203620023b HTTP/1.1
+

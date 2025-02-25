@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -7,7 +7,7 @@ import { ArticleEntity } from '../../domain/article.entity';
 import { ArticleRepository } from '../../domain/article.repository';
 import { ArticleDocument } from '../schemas/article.schema';
 import { ArticlesDto } from 'src/articles/domain/dto/articles.dto';
-import { CacheInvalidationHelper } from 'src/shared/cache.invalidation.helper';
+import Keyv from 'keyv';
 
 @Injectable()
 export class ArticleMongooseRepository implements ArticleRepository {
@@ -15,7 +15,6 @@ export class ArticleMongooseRepository implements ArticleRepository {
   constructor(
     @InjectModel('Article') private articleModel: Model<ArticleDocument>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private cacheInvalidationHelper: CacheInvalidationHelper
   ) {}
 
   async create(article: ArticleEntity): Promise<String> {
@@ -23,10 +22,9 @@ export class ArticleMongooseRepository implements ArticleRepository {
     const savedArticle = await newArticle.save();
 
     if (!savedArticle) {
-      throw new Error('Article not created');
+      throw new UnauthorizedException('Article not created');
     }
-
-    await this.cacheInvalidationHelper.clearCache();
+    await this.invalidateCache('article_');
     return 'Article created';
   }
 
@@ -38,22 +36,21 @@ export class ArticleMongooseRepository implements ArticleRepository {
     ).exec();
 
     if (!updatedArticle) {
-      throw new Error('Article not updated');
+      throw new UnauthorizedException('Article not updated');
     }
 
-    await this.cacheManager.del(`article_id_${id}`);
-    await this.cacheInvalidationHelper.clearCache();
+    await this.invalidateCache('article_');
+
     return 'Article updated';
   }
 
   async delete(id: string): Promise<void> {
     await this.articleModel.findByIdAndDelete(id).exec();
-    await this.cacheManager.del(`article_id_${id}`);
-    await this.cacheInvalidationHelper.clearCache();
+    await this.invalidateCache('article_');
   }
 
   async findAll(page: number = 1, limit: number = 10): Promise<ArticlesDto> {
-    const cacheKey = `articles_all_page${page}_limit${limit}`;
+    const cacheKey = `article_all_page_${page}_limit${limit}`;
     const cachedArticles = await this.cacheManager.get<ArticlesDto>(cacheKey);
 
     if (cachedArticles) {
@@ -70,7 +67,7 @@ export class ArticleMongooseRepository implements ArticleRepository {
       limit,
     };
 
-    await this.cacheManager.set(cacheKey, result, 300);
+    await this.cacheManager.set(cacheKey, result);
     return result;
   }
 
@@ -86,7 +83,7 @@ export class ArticleMongooseRepository implements ArticleRepository {
     if (!article) return null;
 
     const entity = this.toEntity(article);
-    await this.cacheManager.set(cacheKey, entity, 300);
+    await this.cacheManager.set(cacheKey, entity);
     return entity;
   }
 
@@ -102,14 +99,14 @@ export class ArticleMongooseRepository implements ArticleRepository {
     if (!article) return null;
 
     const entity = this.toEntity(article);
-    await this.cacheManager.set(cacheKey, entity, 300);
+    await this.cacheManager.set(cacheKey, entity);
     return entity;
   }
 
   async updateLikes(id: string, userId: string): Promise<void> {
     const article = await this.articleModel.findById(id).exec();
     if (!article) {
-      throw new Error('Article not found');
+      throw new UnauthorizedException('Article not found');
     }
 
     const likeIndex = article.likes.indexOf(userId);
@@ -117,45 +114,44 @@ export class ArticleMongooseRepository implements ArticleRepository {
 
     const updatedArticle = await article.save();
     if (!updatedArticle) {
-      throw new Error('Article likes not updated');
+      throw new UnauthorizedException('Article likes not updated');
     }
 
     await this.cacheManager.del(`article_id_${id}`);
-    await this.cacheInvalidationHelper.clearCache();
   }
 
-  async search(title: string, tags: string[]): Promise<ArticleEntity[]> {
-    const cacheKey = `articles_search_${title}_${tags?.join(',')}`;
+  async search(title: string): Promise<ArticleEntity[]> {
+    const cacheKey = `article_search_${title}`;
     const cachedArticles = await this.cacheManager.get<ArticleEntity[]>(cacheKey);
 
     if (cachedArticles) {
       return cachedArticles;
     }
 
-    const query: any = {};
-    if (title) {
-      query.title = { $regex: title, $options: 'i' };
-    }
-    if (tags && tags.length > 0) {
-      query.tags = { $in: tags };
-    }
-
-    const articles = await this.articleModel.find(query).exec();
+    const articles = await this.articleModel.find({title: { $regex: '.*' + title + '.*',  $options: 'i' } }).exec();
+    
     const articleEntities = articles.map(article => this.toEntity(article));
 
-    await this.cacheManager.set(cacheKey, articleEntities, 300);
+    await this.cacheManager.set(cacheKey, articleEntities);
     return articleEntities;
   }
 
-  private async invalidateCache() {
-    if ('keys' in this.cacheManager) {
-      const keys = await (this.cacheManager as any).keys();
-      await Promise.all(keys.map((key: string) => this.cacheManager.del(key)));
+  async invalidateCache(prefix: string): Promise<void> {
+    try {
+      for (const store of this.cacheManager.stores) {
+        if (store instanceof Keyv) {
+          await store.clear();
+        }
+      }
+    } catch (error) {
+      throw new UnauthorizedException(`Erro ao limpar cache: ${error.message}`);
     }
   }
   
+
   private toEntity(document: ArticleDocument): ArticleEntity {
     return {
+      id: document._id?.toString() ?? '',
       title: document.title,
       slug: document.slug,
       author_id: document.author_id,
@@ -163,8 +159,9 @@ export class ArticleMongooseRepository implements ArticleRepository {
       cover: document.cover,
       likes: document.likes,
       tags: document.tags,
-      comments: document.comments,
       status: document.status,
+      createdAt: document.createdAt,
+      updatedAt: document.updatedAt,
     };
   }
 }

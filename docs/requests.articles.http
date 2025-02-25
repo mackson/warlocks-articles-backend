@@ -1,4 +1,4 @@
-@token = YOUR_ACCESS_TOKEN
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JkMWU1MjE4NWUyNTQ5NDI3NzM3NDgiLCJlbWFpbCI6Im1qYW5lLmRvZUBleGFtcGxlLmNvbSIsInJvbGVzIjpbImF1dGhvciJdLCJpYXQiOjE3NDA0ODM1OTIsImV4cCI6MTc0MDQ4NzE5Mn0.l6wcEYR6nOWgSnZqWM8XsfKLlVVtj-MqW_48GiR8cHE
 
 ### Login public endpoint
 POST http://localhost:5001/account/login
@@ -15,44 +15,43 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Article Title",
-  "content": "Article Content",
+  "title": "Oh My god2",
+  "content": "Lorem ipsum",
   "cover": "https://example.com/cover.jpg",
-  "tags": ["tag1", "tag2"]
+  "tags": ["dev", "node", "react"]
 }
 
 ### Update Article (requires athenticated user)
-PUT http://localhost:5001/articles/update/{articleId}
+PUT http://localhost:5001/articles/update/67bd3c32b466408285313a8f
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Article Title 2",
-  "content": "Article Content 2",
+  "title": "How to create an Awesome App with React and Node.js",
+  "content": "Lorem ipsum, dollor sit amet 2",
   "cover": "https://example.com/cover2.jpg",
-  "tags": ["tag1", "tag2", "tag3"]
+  "tags": ["node", "react"]
 }
 
 ### Update Likes (requires athenticated user)
-GET http://localhost:5001/articles/updatelike/{articleId} HTTP/1.1
+GET http://localhost:5001/articles/updatelike/67bd3c32b466408285313a8f HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Delete Article (requires athenticated user)
-DELETE http://localhost:5001/articles/delete/{articleId} HTTP/1.1
+DELETE http://localhost:5001/articles/delete/dsfasdfa HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Get all articles with pagination
 GET http://localhost:5001/articles/all?page=1&limit=10 HTTP/1.1
 
 ### Show Article by Slug
-GET http://localhost:5001/articles/{slug} HTTP/1.1
+GET http://localhost:5001/articles/article-title-f0f8913e-a206-43c7-9c27-f1c2d9c7c587 HTTP/1.1
 
 ### Search Articles
-POST http://localhost:5001/articles/search HTTP/1.1
+POST http://localhost:5001/articles/search
 Content-Type: application/json
 
 {
-  "title": "Palavra-chave do título",
-  "tags": ["tag1"]
+  "title": "how"
 }
 

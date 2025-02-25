@@ -21,7 +21,7 @@ export class UpdateArticleUseCase {
 
     const updatedArticle = await this.articleRepository.update(articleId, data);
     if (!updatedArticle) {
-      throw new Error('Article not updated');
+      throw new NotFoundException('Article not updated');
     }
 
     return updatedArticle;

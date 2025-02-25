@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { CommentRepository } from '../domain/comment.repository';
 import { CommentEntity } from '../domain/comment.entity';
@@ -19,7 +19,7 @@ export class UpdateCommentUseCase {
 
     const updatedComment = await this.commentRepository.update(articleId, commentId, comment);
     if (!updatedComment) {
-      throw new Error('Comment not updated');
+      throw new UnauthorizedException('Comment not updated');
     }
 
     return updatedComment;
@@ -28,13 +28,14 @@ export class UpdateCommentUseCase {
   async updateLikes(articleId: string, commentId: string, userId: string): Promise<void> {
     const article = await this.articleRepository.findById(articleId);
     if (!article) {
-      throw new Error('Article not found');
+      throw new NotFoundException('Article not found');
     }
 
-    const comment = article.comments.find(cmnt => cmnt.id === commentId);
-    if (!comment) {
-      throw new Error('Comment not found');
-    }
+     const comment = await this.commentRepository.findById(commentId);
+      if (!comment) {
+        throw new NotFoundException('Comment not found');
+      }
+
     await this.commentRepository.updateLikes(articleId, commentId, userId);
   }
 }

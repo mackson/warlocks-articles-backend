@@ -6,7 +6,7 @@ export interface ArticleRepository {
   update(id: string, article: Partial<ArticleEntity>): Promise<String>;
   delete(id: string): Promise<void>;
   findAll(page: number, limit: number): Promise<ArticlesDto>;
-  search(title:string, tags:string[]): Promise<ArticleEntity[]>;
+  search(title: string): Promise<ArticleEntity[]>;
   findBySlug(slug: string): Promise<ArticleEntity | null>;
   findById(id: string): Promise<ArticleEntity | null>;
   updateLikes(id: string, like:string): Promise<void>;

@@ -51,7 +51,7 @@ export class UpdateProfileUseCase {
     const updatedAccount = await this.accountRepository.update(accountId, account);
 
     if (!updatedAccount) {
-      throw new Error('Account not updated');
+      throw new ConflictException('Account not updated');
     }
   
     return 'Account updated';

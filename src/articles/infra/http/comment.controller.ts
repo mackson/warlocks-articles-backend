@@ -17,9 +17,10 @@ import { CreateCommentUseCase } from 'src/articles/application/create-comment.us
 import { UpdateCommentUseCase } from 'src/articles/application/update-comment.usecase';
 import { DeleteCommentUseCase } from 'src/articles/application/delete-comment.usecase';
 import { GetAllCommentsUseCase } from 'src/articles/application/get-all-comments.usecase';
+import { GetOneCommentUseCase } from 'src/articles/application/get-one-comment.usecase';
 import { CommentDto } from '../dto/comment.dto';
 
-@Controller('/articles/:articleId/comments')
+@Controller('/comments')
 @ApiTags('Comments')
 export class CommentController {
   constructor(
@@ -27,13 +28,14 @@ export class CommentController {
     private updateCommentUseCase: UpdateCommentUseCase,
     private deleteCommentUseCase: DeleteCommentUseCase,
     private getAllCommentsUseCase: GetAllCommentsUseCase,
+    private getOneCommentUseCase: GetOneCommentUseCase,
   ) {}
 
   @Post('create')
   @UseGuards(AuthGuard)
   async create(
-    @Param('articleId') articleId: string, 
-    @Body() commentDto: CommentDto, 
+    @Body('articleId') articleId: string, 
+    @Body() commentDto: Partial<CommentDto>, 
     @Request() req: any
   ) {
     try {
@@ -45,11 +47,12 @@ export class CommentController {
   }
   
 
-  @Put('/update/:commentId')
+  @Put('/update/:articleId/:commentId')
+  @UseGuards(AuthGuard)
   async update(
     @Param('articleId') articleId: string,
     @Param('commentId') commentId: string,
-    @Body() commentDto: CommentDto,
+    @Body() commentDto: Partial<CommentDto>,
     @Request() req: any
   ) {
     try {
@@ -67,13 +70,14 @@ export class CommentController {
   }
 
   @Delete('/delete/:commentId')
+  @UseGuards(AuthGuard)
   async delete(
     @Param('articleId') articleId: string,
     @Param('commentId') commentId: string,
     @Request() req: any
   ) {
     try {
-      await this.deleteCommentUseCase.execute(articleId, commentId, req.account.sub);
+      await this.deleteCommentUseCase.execute(commentId, req.account.sub);
       return { message: 'Comment deleted successfully' };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -86,7 +90,7 @@ export class CommentController {
     }
   }
 
-  @Get('all')
+  @Get('/all/:articleId')
   async getAll(@Param('articleId') articleId: string) {
     try {
       const comments = await this.getAllCommentsUseCase.execute(articleId);
@@ -96,7 +100,17 @@ export class CommentController {
     }
   }
 
-  @Get('/updatelike/:articleId/:commentId')
+  @Get(':id')
+  async showComment(@Param('id') id: string) {
+    try {
+      const comment = await this.getOneCommentUseCase.execute(id);
+      return comment;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Get('/like/:articleId/:commentId')
   @UseGuards(AuthGuard)
   async updateLikes(
     @Param('articleId') articleId: string,
