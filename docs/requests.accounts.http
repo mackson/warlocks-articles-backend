@@ -76,3 +76,7 @@ Authorization: Bearer {{token}}
 
 ### Health Check
 GET http://localhost:5001/account/health
+
+
+### Health Check 2
+GET http://warlocks.api.codestation.com.br/account/health
