@@ -5,7 +5,7 @@ POST http://localhost:5001/account/login
 Content-Type: application/json
 
 {
-  "username": "mjane.doe@example.com",
+  "email": "mjane.doe@example.com",
   "password": "password123"
 }
 
@@ -15,9 +15,9 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Oh My god2",
+  "title": "Oh my God, this is a new article",
   "content": "Lorem ipsum",
-  "cover": "https://example.com/cover.jpg",
+  "cover": "https://fakeimg.pl/600x400?text=cover",
   "tags": ["dev", "node", "react"]
 }
 
@@ -28,8 +28,8 @@ Authorization: Bearer {{token}}
 
 {
   "title": "How to create an Awesome App with React and Node.js",
-  "content": "Lorem ipsum, dollor sit amet 2",
-  "cover": "https://example.com/cover2.jpg",
+  "content": "Lorem ipsum, dollor sit amet",
+  "cover": "https://fakeimg.pl/600x400?text=cover",
   "tags": ["node", "react"]
 }
 

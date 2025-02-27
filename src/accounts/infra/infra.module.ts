@@ -10,6 +10,7 @@ import { UpdateAccountUseCase } from '../application/update-account.usecase';
 import { CreateProfileUseCase } from '../application/create-profile.usecase';
 import { UpdateProfileUseCase } from '../application/update-profile.usecase';
 import { GetProfileUseCase } from '../application/get-profile.usecase';
+import { AccountSeeder } from './seeders/account.seeder';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { GetProfileUseCase } from '../application/get-profile.usecase';
     GetAllAccountsUseCase,
     GetProfileUseCase,
     AuthUseCase,
+    AccountSeeder,
   ],
   exports: [
     'AccountRepository',
@@ -38,6 +40,7 @@ import { GetProfileUseCase } from '../application/get-profile.usecase';
     GetAllAccountsUseCase,
     GetProfileUseCase,
     AuthUseCase,
+    AccountSeeder,
   ],
   
 })

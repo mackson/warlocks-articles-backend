@@ -1,6 +1,6 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AccountRepository } from '../domain/account.repository';
-import { AccountEntity } from '../domain/account.entity';
+import { AccountDto } from '../domain/dto/account.dto';
 
 @Injectable()
 export class GetProfileUseCase {
@@ -8,11 +8,16 @@ export class GetProfileUseCase {
     @Inject('AccountRepository') private accountRepository: AccountRepository,
   ) { }
 
-  async execute(id: string): Promise<AccountEntity> {
-    const account = await this.accountRepository.findById(id);
+  async execute(id: string, userId:string): Promise<AccountDto> {
+    const account = await this.accountRepository.findProfile(id);
     if (!account) {
       throw new ConflictException('Account not found');
     }
+    
+    if (account.id !== userId) {
+      throw new UnauthorizedException('You do not have permission to view this profile');
+    }
+    
     return account;
   }
 }

@@ -40,7 +40,7 @@ export class CreateProfileUseCase {
     const savedAccount = await this.accountRepository.create(account);
 
     if (!savedAccount) {
-    throw new ConflictException('Account not created');
+      throw new ConflictException('Account not created');
     }
   
     return 'Account created';

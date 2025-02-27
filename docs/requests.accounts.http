@@ -1,15 +1,15 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JkYzBlNzgzZWVkM2MzM2JkNWM5YTEiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwicm9sZXMiOlsiYXV0aG9yIl0sImlhdCI6MTc0MDQ4ODk4MywiZXhwIjoxNzQwNDkyNTgzfQ.0K7FEEA02dJ727LH_C1mubHCgJKAdjBjByHwrzt8JCE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2JkYzBlNzgzZWVkM2MzM2JkNWM5YTEiLCJlbWFpbCI6ImphbmUuZG9lQGV4YW1wbGUuY29tIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzQwNjA5NjAwLCJleHAiOjE3NDA2MTMyMDB9.PUasDqYrPfWaZ9gYysnh_xukoiVSS82cLSuMwQK5lZU
 
 ### Login
 POST http://localhost:5001/account/login
 Content-Type: application/json
 
 {
-  "username": "jane.doe@example.com",
+  "email": "jane.doe@example.com",
   "password": "password123"
 }
 
-### Create Account (requires admin role)
+### Create Admin Account (requires admin role)
 POST http://localhost:5001/account/create
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -20,11 +20,11 @@ Authorization: Bearer {{token}}
   "bio": "This is a bio",
   "password": "password123",
   "status": 1,
-  "avatar": "https://example.com/avatar.jpg",
+  "avatar": "https://fakeimg.pl/600x400?text=avatar",
   "roles": ["author"]
 }
 
-### Update Account (requires admin role)
+### Update Admin Account (requires admin role)
 PUT http://localhost:5001/account/update
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -38,21 +38,19 @@ Authorization: Bearer {{token}}
 GET http://localhost:5001/account/all
 Authorization: Bearer {{token}}
 
-### Create Profile (Public endpoint)
+### Create Author Profile (Public endpoint)
 POST http://localhost:5001/account/signup
 Content-Type: application/json
 
 {
-  "name": "Jane Doe",
-  "email": "jane.doe@example.com",
+  "name": "2Jane Doe",
+  "email": "2jane.doe@example.com",
   "bio": "This is a bio",
   "password": "password123",
-  "status": 1,
-  "avatar": "https://example.com/avatar.jpg",
-  "roles": ["admin"]
+  "avatar": "https://fakeimg.pl/600x400?text=WAR"
 }
 
-### Update Profile (requires auth token)
+### Update Author Profile (requires auth token)
 PUT http://localhost:5001/account/updateprofile
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -65,6 +63,16 @@ Authorization: Bearer {{token}}
 ### Get One Profile by Id (requires auth token)
 GET http://localhost:5001/account/profile/67bdc0e783eed3c33bd5c9a1
 Authorization: Bearer {{token}}
+
+
+
+### Check token health by Id
+POST http://localhost:5001/account/checktoken
+Authorization: Bearer {{token}}
+
+{
+  "accountId": "67bdc0e783eed3c33bd5c9a1",
+}
 
 ### Health Check
 GET http://localhost:5001/account/health

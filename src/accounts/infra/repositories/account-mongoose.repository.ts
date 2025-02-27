@@ -33,6 +33,11 @@ export class AccountMongooseRepository implements AccountRepository {
     return account ? AccountMapper.returnAllAccountData(account) : null;
   }
 
+  async findProfile(id: string): Promise<AccountDto | null> {
+    const account = await this.accountModel.findById(id).exec();
+    return account ? AccountMapper.returnAccount(account) : null;
+  }
+
   async update(id: string, data: AccountEntity): Promise<String> {
     const updatedAccount = await this.accountModel.findByIdAndUpdate(
       id,

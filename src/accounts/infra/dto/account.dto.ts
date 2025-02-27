@@ -69,7 +69,7 @@ export class AccountDto {
     description: 'The status of the account',
   })
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   status: number;
 
   @ApiProperty({

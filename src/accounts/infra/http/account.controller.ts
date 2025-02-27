@@ -11,7 +11,7 @@ import {
     Param
 } from '@nestjs/common';
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthUseCase } from 'src/accounts/application/auth.usecase';
 import { AuthGuard } from 'src/accounts/application/guards/auth.guard';
 import { Role } from 'src/accounts/application/roles/role.enum';
@@ -39,8 +39,12 @@ export class AccountController {
   ) { }
 
   @Post('login')
-  login(@Body() signInDto: Record<string, any>) {
-    return this.authUseCase.login(signInDto.username, signInDto.password);
+  @ApiBody({ type: AccountDto })
+  login(
+    @Body('email') email: string, 
+    @Body('password') password: string
+  ) {
+    return this.authUseCase.login(email, password);
   }
 
   @Get('all')
@@ -130,10 +134,27 @@ export class AccountController {
   @Get('/profile/:accountId')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Author, Role.Admin)
-  async profile(@Param('accountId') accountId: string) {
+  async profile(
+    @Param('accountId') accountId: string,
+    @Request() req: any,
+  ) {
     try {
-      const profile = await this.getProfileUseCase.execute(accountId);
+      const profile = await this.getProfileUseCase.execute(accountId, req.account.sub);
       return profile;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
+
+  @Post('/checktoken')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Author, Role.Admin)
+  async validate(@Request() req: any) {
+    try {
+      return req.account;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);

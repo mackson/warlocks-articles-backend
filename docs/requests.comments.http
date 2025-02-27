@@ -5,7 +5,7 @@ POST http://localhost:5001/account/login
 Content-Type: application/json
 
 {
-  "username": "mjane.doe@example.com",
+  "email": "mjane.doe@example.com",
   "password": "password123"
 }
 
@@ -17,7 +17,7 @@ Authorization: Bearer {{token}}
 {
   "articleId": "67bd3c32b466408285313a8f",
   "author_id": "67bd1e52185e254942773748",
-  "comment": "Este é um comentário de exemplo4",
+  "comment": "This is an awesome comment, lorem ipsum",
   "is_reply": 0
 }
 
@@ -27,7 +27,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "comment": "Este é um comentário atualizado7",
+  "comment": "This is an awesome comment, lorem ipsum dollor sit amet",
   "author_id": "67bd1e52185e254942773748"
 }
 

@@ -31,7 +31,7 @@ export class AwsS3Helper {
 
     try {
       const uploadResult = await this.s3.upload(params).promise();
-      return uploadResult.Location; // Retorna a URL do arquivo
+      return uploadResult.Location;
     } catch (error) {
       throw new Error(`Erro ao fazer upload: ${error.message}`);
     }

@@ -13,8 +13,8 @@ services:
       - ./default:/etc/nginx/sites-available/default
     depends_on:
       - mongo
-      - rabbitmq
       - redis
+      # - rabbitmq
 
   mongo:
     image: mongo:latest
@@ -26,21 +26,21 @@ services:
       - "27017:27017"
     volumes:
       - ./docker/mongo:/data/db
-   
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq-warlocks
-    environment:
-      - RABBITMQ_DEFAULT_USER=user_rmq
-      - RABBITMQ_DEFAULT_PASS=warlocks
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - ./docker/rabbitmq:/var/lib/rabbitmq
 
   redis:
     image: redis:latest
     container_name: redis-warlocks
     ports:
       - "6379:6379"
+   
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq-warlocks
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=user_rmq
+  #     - RABBITMQ_DEFAULT_PASS=warlocks
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   volumes:
+  #     - ./docker/rabbitmq:/var/lib/rabbitmq
