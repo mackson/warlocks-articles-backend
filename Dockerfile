@@ -25,6 +25,6 @@ RUN chmod +x start.sh
 
 EXPOSE 5001 80
 
-COPY ./default /etc/nginx/sites-available/default
+COPY ./default.conf /etc/nginx/sites-available/default.conf
 
 CMD ["sh", "/var/www/html/start.sh"]
