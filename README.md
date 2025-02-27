@@ -2,7 +2,7 @@
 
 ![capa](docs/images/warlockstech_cover.jpeg)
 
-Este repositório foi criado para demonstração do backend / API REST para o desafio técnico da Warlocks. Nele temos uma aplicação para gerenciamento de artigos utilizando tecnologias e metodologias modernas para o desenvolvimento web. Optei por usar no backend um system design baseado em Domain Driven Design e Clean Architecture para promover o desacoplamento dos dominios de negócios das demais camadas da aplicação como; infraestrutura, persistência e apresentação, esse modelo é amplamente utilizado em projetos de grande porte, e viabiliza escala em aplicações monoliticas ou microsserviços.
+Este repositório foi criado para demonstração do backend / API REST do desafio técnico da Warlocks. Nele temos uma aplicação para gerenciamento de artigos e comentários utilizando tecnologias e metodologias modernas para o desenvolvimento web. Optei por usar no backend um system design baseado em Domain Driven Design e Clean Architecture para promover o desacoplamento dos dominios de negócios das demais camadas da aplicação como; infraestrutura, persistência e apresentação, esse modelo é amplamente utilizado em projetos de grande porte, e viabiliza escala em aplicações monoliticas ou microsserviços.
 
 ### Tecnologias usadas no backend
 
@@ -21,9 +21,9 @@ Este repositório foi criado para demonstração do backend / API REST para o de
 - [ ]  Test Driven Development - Testes de integração / E2E
 - [ ]  Domain Driven Design - Dominios de negócios desacoplados das demais camadas da aplicação
 - [ ]  Linguagem ubiqua - Time de produto se entende com o time de desenvolvimento
-- [ ]  Monorepo com Domain Driven Design, dominios de negócios desacoplados das demais camadas da aplicação
+- [ ]  Monorepo
 - [ ]  SOLID, classes com responsabilidades bem definidas, interfaces para facilitar a troca de implementações, etc.
-- [ ]  Gitflow customizado (development / prod), com branches para features e hotfixes. Nenhuma branch pode mergeada diretamente na main, deve passar por rigorosas revisões de código antes de ser aprovada.
+- [ ]  Gitflow customizado (development / prod), com branches para features e hotfixes. Nenhuma branch pode ser mergeada diretamente na main, sem passar por rigorosas revisões de código na development antes.
 - [ ]  XSS Sanitizer para prevenir ataques de injeção de código malicioso
 - [ ]  Criptografia de senhas com bcrypt
 
@@ -69,6 +69,7 @@ ADMIN_PASSWORD=admin1234
 ```
 ## Atenção
 Toda a aplicação está conteinerizada por tanto para testar localmente basta usar os seguintes comandos:
+
 Obs: será necessário ter o docker e docker-compose instalados na sua máquina.
 
 
@@ -87,10 +88,12 @@ docker-compose down
 ### Como experimentar a API Localmente
 
 Para testar os endpoints da API, você pode usar um extensão do Vscode chamada REST Client.
+
 Obs: No entanto fique a vontade para usar qualquer outra ferramenta de sua preferência para testar os endpoints.
+
 ![capa](docs/images/http.png)
 
-Dentro da raiz do nosso projeto tem uma subpasta chamada requests, dentro dela você pode usar os arquivos .http para testar os endpoints.
+Dentro da raiz do nosso projeto tem uma subpasta chamada requests, dentro dela você pode usar os arquivos .http para realizar as requisições aos endpoints. Lembre-se de ao logar, incluir o token na variavel @token
 
 ```bash
 @token = SEU TOKEN
@@ -130,7 +133,7 @@ Você pode verificar a documentação Swagger da API em:
 
 ## Como rodar os Testes E2E?
 
-Implementei três testes E2E para os controladores account e article e comments, para rodar os testes basta executar o seguinte comando na raiz do projeto:
+Implementei três testes E2E para os controladores account, article e comments. Para rodar os testes basta executar o seguinte comando na raiz do projeto:
 
 ![capa](docs/images/tests.png)
 
@@ -146,12 +149,14 @@ yarn test:e2e
 
 ## Infraestrutura, Arquitetura / System Design
 
-Por possuir um ótimo conhecimento com os serviços da AWS optaria por hospedar a aplicação em um cluster EKS, com uma VPC configurada a um Load Balancer (ALB), que iria me garantir o gerenciamento de carga para as Tasks do meu cluster e a consequente escala da aplicação, implementaria também um Auto Scaling no service do cluster, usaria o S3 para armazenamento de arquivos, implementaria no Atlas um cluster mongoodb, com replicas, indexação dos documentos mais criticos. Implementaria um cluster Elasticache com Redis para viabilizar o caching.
+Por possuir um ótimo conhecimento com os serviços da AWS optaria por hospedar a aplicação em um cluster EKS, com uma VPC configurada a um Load Balancer (ALB), que iria me garantir o gerenciamento de carga para as Tasks do meu cluster e a consequente escala da aplicação, implementaria também um Auto Scaling no service do cluster. 
+
+Para armazenamento, uploads de arquivos usaria o S3. Já que nosso banco de dados é o MongoDB, utilizaria o serviço da Mongodb Atlas criando um cluster, master/slave (CQRS) com réplicas de leitura além disso implementaria indexação nos documentos mais criticos otimizando a performance. Para caching utilizaria um cluster Elasticache com Redis ou uma solução on-premises com Elasticsearch.
 
 ![capa](docs/images/systemdesign.png)
 
 
-### TODO (O que eu faria com mais tempo)
+### TODO - O que eu faria com mais tempo?
 
 - [ ]  TODO: Observabilidade (APM) e monitoramento utilizaria o Prometheus com Grafana
 - [ ]  TODO: Terraform para subir as infraestruturas de development e production
@@ -161,17 +166,18 @@ Por possuir um ótimo conhecimento com os serviços da AWS optaria por hospedar 
 - [ ]  TODO: Husky para linting e commit hooks
 - [ ]  TODO: Cluster EKS com Load Balancer e Auto Scaling
 - [ ]  TODO: AWS S3 para armazenamento de arquivos
-- [ ]  TODO: AWS SNS/SQ para notificação de artigos, e envio de email.
+- [ ]  TODO: AWS SNS/SQS para notificação de artigos, ou envio de emails.
 - [ ]  TODO: Cluster AWS Elasticache com Redis para viabilizar o caching
-- [ ]  TODO: Atlas Mongodb para armazenamento de dados
+- [ ]  TODO: Cluster Mongodb Atlas com replicas de leitura e escrita
 - [ ]  TODO: Code review automatizado com SonarQube
-- [ ]  TODO: Ambiente de dev e prod
+- [ ]  TODO: Ambientes bem definidos de dev e prod
 - [ ]  TODO: Passport Strategy para autenticação
 - [ ]  TODO: Usar CQRS para segregar as responsabilidades de leitura e escrita de dados
 - [ ]  TODO: Indexação dos documentos mais criticos no Atlas Mongodb
 - [ ]  TODO: Teste de carga com K6, para analisar APM, performance, RPS e Thresholds.
 - [ ]  TODO: Integração com frontend
 - [ ]  TODO: SSL com certificado da AWS
+- [ ]  TODO: AWS SES para envio de emails (Muito barato)
 
 ## Infraestruturas alternativas
 
