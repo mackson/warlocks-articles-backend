@@ -61,10 +61,10 @@ describe('AccountController (e2e)', () => {
       authUseCase.login.mockResolvedValue(result);
       const response = await request(app.getHttpServer())
         .post('/account/login')
-        .send({ username: 'testuser', password: 'testpass' })
+        .send({ email: 'testuser@example.com', password: 'testpass' })
         .expect(HttpStatus.CREATED);
       expect(response.body).toEqual(result);
-      expect(authUseCase.login).toHaveBeenCalledWith('testuser', 'testpass');
+      expect(authUseCase.login).toHaveBeenCalledWith('testuser@example.com', 'testpass');
     });
   });
 
@@ -140,13 +140,17 @@ describe('AccountController (e2e)', () => {
 
   describe('GET /account/profile/:accountId', () => {
     it('should return a profile', async () => {
-      const profile = { id: '1', username: 'profileuser' };
-      getProfileUseCase.execute.mockResolvedValue(profile);
+      // Mock do perfil retornado pela Use Case
+      const profile = { email: 'profileuser@example.com' };
+      getProfileUseCase.execute = jest.fn().mockResolvedValue(profile);
+
       const response = await request(app.getHttpServer())
-        .get('/account/profile/1')
+        .get('/account/profile/fake-user-id')
+        .set('Authorization', `Bearer fake-token`) // Simula um token JWT válido
         .expect(HttpStatus.OK);
+
       expect(response.body).toEqual(profile);
-      expect(getProfileUseCase.execute).toHaveBeenCalledWith('1');
+      expect(getProfileUseCase.execute).toHaveBeenCalledWith('fake-user-id', expect.any(String));
     });
   });
 
