@@ -43,7 +43,7 @@ Este repositório foi criado para demonstração do backend / API REST para o de
 
 Você poderá testar a API neste endereço logo a baixo mas se quiser testar localmente, basta seguir os passos:
 
-[https://warlocks.api.codestation.com.br](warlocks.api.codestation.com.br)
+[http://warlocks.api.codestation.com.br](http://warlocks.api.codestation.com.br)
 
 ### O primeiro passo é clonar o projeto:
 
