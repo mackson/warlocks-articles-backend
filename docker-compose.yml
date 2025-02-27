@@ -10,7 +10,7 @@ services:
       - "5001:5001"
     volumes:
       - .:/var/www/html
-      - ./default:/etc/nginx/sites-available/default
+      - ./default.conf:/etc/nginx/sites-available/default.conf
     depends_on:
       - mongo
       - redis

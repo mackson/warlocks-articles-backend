@@ -74,10 +74,13 @@ Obs: será necessário ter o docker e docker-compose instalados na sua máquina.
 
 ```bash
 ## Na primeira vez
-docker-compose up --build
+docker-compose up --build -d
 
 ## Após o primeiro build
 docker-compose up -d
+
+## Para parar o container
+docker-compose down
 
 ```
 
