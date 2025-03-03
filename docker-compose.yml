@@ -9,12 +9,10 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - .:/var/www/html
-      - ./default.conf:/etc/nginx/sites-available/default.conf
+      - .:/app
     depends_on:
       - mongo
       - redis
-      # - rabbitmq
 
   mongo:
     image: mongo:latest
@@ -32,7 +30,8 @@ services:
     container_name: redis-warlocks
     ports:
       - "6379:6379"
-   
+
+
   # rabbitmq:
   #   image: rabbitmq:3-management
   #   container_name: rabbitmq-warlocks
