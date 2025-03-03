@@ -43,12 +43,12 @@ Este repositório foi criado para demonstração do backend / API REST do desafi
 
 Você poderá testar a API neste endereço logo a baixo mas se quiser testar localmente, basta seguir os passos:
 
-[http://warlocks.api.codestation.com.br](http://warlocks.api.codestation.com.br)
+[https://warlocks-api.codestation.com.br](https://warlocks-api.codestation.com.br)
 
 ### O primeiro passo é clonar o projeto:
 
 ```bash
-git clone git@github.com:mackson/warlocks-articles-frontend.git
+git clone git@github.com:mackson/warlocks-articles-backend.git
 
 ```
 

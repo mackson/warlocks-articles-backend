@@ -1,30 +1,35 @@
-FROM nginx:latest
+# Etapa de build
+FROM node:23 AS builder
 
-RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_23.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g pm2
+WORKDIR /app
 
+COPY package.json package-lock.json ./
 
-RUN apt-get install -y procps \
-    && apt-get install -y nano \
-    && apt-get install -y net-tools \
-    && apt-get install -y iputils-ping
- 
-
-WORKDIR /var/www/html
-
-COPY package*.json ./
-
-RUN npm install
+RUN npm install --legacy-peer-deps --production
 
 COPY . .
 
-RUN chmod +x start.sh
+RUN npm run build
 
-EXPOSE 5001 80
+# Etapa de runtime
+FROM node:23 AS runner
 
-COPY ./default.conf /etc/nginx/sites-available/default.conf
+WORKDIR /app
 
-CMD ["sh", "/var/www/html/start.sh"]
+COPY --from=builder /app ./
+
+# Instala PM2 globalmente
+RUN npm install -g pm2
+
+# Instala pacotes essenciais
+RUN apt-get update && apt-get install -y \
+    procps nano net-tools iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 5001
+
+# Copia o script de inicialização
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
